@@ -1,0 +1,91 @@
+from collections import UserDict
+
+
+class Field:
+    def __init__(self, value=None):
+        self.value = value
+
+    def __str__(self):
+        return str(self.value)
+
+class Name(Field):
+    def __init__(self, value):
+        super().__init__(value)
+
+class Phone(Field):
+    def __init__(self, value):
+        super().__init__(value)
+
+class Record:
+    def __init__(self, name):
+        self.name = Name(name)
+        self.phones = []
+
+    def add_phone(self, phone):
+        self.phones.append(Phone(phone))
+
+    def remove_phone(self, phone):
+        for p in self.phones:
+            if p.value == phone:
+                self.phones.remove(p)
+                break
+
+    def edit_phone(self, old_phone, new_phone):
+        for p in self.phones:
+            if p.value == old_phone:
+                p.value = new_phone
+                break
+
+    def __str__(self):
+        return f"{self.name}: {', '.join([str(p) for p in self.phones])}"
+
+
+class AddressBook(UserDict):
+    def add_record(self, record):
+        key = record.name.value
+        self.data[key] = record
+
+    def search(self, name=None, phone=None):
+        results = []
+        for record in self.data.values():
+            if name and name.lower() not in record.name.value.lower():
+                continue
+            if phone and phone not in [p.value for p in record.phones]:
+                continue
+            results.append(record)
+        return results
+
+
+book = AddressBook()
+
+# Add records
+r1 = Record("John Smith")
+r1.add_phone("123-456-7890")
+r1.add_phone("456-789-0123")
+book.add_record(r1)
+
+r2 = Record("Jane Doe")
+r2.add_phone("555-555-5555")
+book.add_record(r2)
+
+# Search by name
+results = book.search(name="john")
+print(f"Found {len(results)} records:")
+for r in results:
+    print(r)
+
+# Search by phone
+results = book.search(phone="555-555-5555")
+print(f"Found {len(results)} records:")
+for r in results:
+    print(r)
+
+# Edit record
+r1.edit_phone("123-456-7890", "111-111-1111")
+print(r1)
+
+# Remove record
+del book["Jane Doe"]
+print(book)
+
+
