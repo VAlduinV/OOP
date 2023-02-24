@@ -56,36 +56,17 @@ class AddressBook(UserDict):
         return results
 
 
-book = AddressBook()
-
-# Add records
-r1 = Record("John Smith")
-r1.add_phone("123-456-7890")
-r1.add_phone("456-789-0123")
-book.add_record(r1)
-
-r2 = Record("Jane Doe")
-r2.add_phone("555-555-5555")
-book.add_record(r2)
-
-# Search by name
-results = book.search(name="john")
-print(f"Found {len(results)} records:")
-for r in results:
-    print(r)
-
-# Search by phone
-results = book.search(phone="555-555-5555")
-print(f"Found {len(results)} records:")
-for r in results:
-    print(r)
-
-# Edit record
-r1.edit_phone("123-456-7890", "111-111-1111")
-print(r1)
-
-# Remove record
-del book["Jane Doe"]
-print(book)
+if __name__ == '__main__':
+    name = Name('Bill')
+    phone = Phone('1234567890')
+    rec = Record(name, phone)
+    ab = AddressBook()
+    ab.add_record(rec)
+ assert isinstance(ab['Bill'], Record)
+ assert isinstance(ab['Bill'].name, Name)
+ assert isinstance(ab['Bill'].phones, list)
+ assert isinstance(ab['Bill'].phones[0], Phone)
+ assert ab['Bill'].phones[0].value == '1234567890'
+ print('All Ok)')
 
 
